@@ -2,6 +2,8 @@
 
 ### Exercice 1. Variables d’environnement
 
+https://github.com/cpe-lyon/tp2-groupe-1-adrien-crosio
+
 1. Dans quels dossiers bash trouve-t-il les commandes tapées par l’utilisateur ?
 
 Grace a la commande : 
@@ -146,14 +148,86 @@ function is_number()
     fi
 }
 
-my_function // todo
-echo $?
-
-
-if [ $(is_number) = 1 ]; then
+is_number
+if [ $? = 1 ]; then
     echo 'Votre parametre est un nombre '
-    echo $(is_number)
 else
     echo 'Votre parametre n est pas un nombre'
 fi
+```
+
+### Exercice 4. Contrôle d’utilisateur
+
+Écrivez un script qui vérifie l’existence d’un utilisateur dont le nom est donné en paramètre du script. Si le script est appelé sans nom d’utilisateur, il aﬀiche le message: "utilisation: nom_du_script nom_utilisateur”, où nom_du_script est le nom de votre script récupéré automatiquement (si vous changez le nom de votre script, le message doit changer automatiquement)
+
+```
+#!/bin/bash
+
+if [ -n "$1" ]; then
+    if [ "$1" = "$USER" ]; then
+        echo "C'est le bon user"
+    else
+        echo "C'est pas le bon user"
+    fi
+else
+    echo "Utilisateur: $0 $USER"
+fi
+```
+
+### Exercice 5. Factorielle 
+
+Écrivez un programme qui calcule la factorielle d’un entier naturel passé en paramètre (on supposera que l’utilisateur saisit toujours un entier naturel).
+
+```
+#!/bin/bash
+var1=1
+for i in $(seq 1 "$1"); do
+    var1=$((var1 * i))
+done
+echo "$var1"
+```
+
+### Exercice 6. Le juste prix 
+
+Écrivez un script qui génère un nombre aléatoire entre 1 et 1000 et demande à l’utilisateur de le deviner. Le programme écrira ”C’est plus!”, ”C’est moins!” ou ”Gagné!” selon les cas (vous utiliserez $RANDOM).
+
+```
+#!/bin/bash
+
+rand="$RANDOM"
+if [ "$1" -eq "$rand" ]; then
+    echo "Gagné!"
+else
+    if [ "$1" -lt "$rand" ]; then
+        echo "C’est plus!"
+    else
+        echo "C’est moins!"
+    fi
+fi
+echo "$rand"
+```
+
+### Exercice 7. Statistiques 
+
+1. Écrivez un script qui prend en paramètres trois entiers (entre -100 et +100) et aﬀiche le min, le max et la moyenne. Vous pouvez réutiliser la fonction de l’exercice 3 pour vous assurer que les paramètres sont bien des entiers. 
+2. Généralisez le programme à un nombre quelconque de paramètres (pensez à SHIFT) 
+3. Modifiez votre programme pour que les notes ne soient plus données en paramètres, mais saisies et stockées au fur et à mesure dans un tableau.
+
+```
+#!/bin/bash
+
+somme=0
+min=100
+max=-100
+for param in $*; do
+    somme=$((somme + param))
+    if [ "$param" -lt "$min" ]; then
+        min="$param"
+    fi
+    if [ "$param" -gt "$min" ]; then
+        max="$param"
+    fi
+done
+moy=$((somme / $#))
+echo "Min = $min, Max = $max, Somme = $somme, Moyenne = $moy"
 ```
